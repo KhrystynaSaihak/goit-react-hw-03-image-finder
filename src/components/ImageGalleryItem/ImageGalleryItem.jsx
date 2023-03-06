@@ -24,16 +24,16 @@ export class ImageGalleryItem extends Component {
   };
 
   render() {
-    const { isModalOpen } = this.state;
     const { webformatURL, tags, largeImageURL } = this.props.imgData;
     return (
       <div>
-        <ImageModal
-          largeImageURL={largeImageURL}
-          onClose={this.closeModal}
-          isOpen={isModalOpen}
-          tags={tags}
-        ></ImageModal>
+        {this.state.isModalOpen && (
+          <ImageModal
+            closeModal={this.closeModal}
+            image={largeImageURL}
+            imageTag={tags}
+          />
+        )}
         <ImageGalleryItemImage
           src={webformatURL}
           alt={tags}

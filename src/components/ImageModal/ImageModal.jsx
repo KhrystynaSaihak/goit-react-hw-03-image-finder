@@ -1,43 +1,42 @@
 import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
+import { Component } from 'react';
+import { Backdrop, ModalWindow } from './ImageModal.styled';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    background: 'none',
-    border: 'none',
-  },
-  overlay: {
-    position: 'fixed',
-    backgroundColor: ' rgba(0, 0, 0, 0.8)',
-  },
-};
+export class ImageModal extends Component {
+  static propTypes = {
+    closeModal: PropTypes.func.isRequired,
+    image: PropTypes.string.isRequired,
+    imageTag: PropTypes.string.isRequired,
+  };
 
-ReactModal.setAppElement('#root');
+  componentDidMount() {
+    window.addEventListener('keydown', this.onKeyDown);
+  }
 
-export const ImageModal = ({ largeImageURL, tags, onClose, isOpen }) => {
-  return (
-    <div>
-      <ReactModal
-        isOpen={isOpen}
-        onRequestClose={onClose}
-        style={customStyles}
-        contentLabel=""
-      >
-        <img src={largeImageURL} alt={tags} width={800} />
-      </ReactModal>
-    </div>
-  );
-};
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKeyDown);
+  }
 
-ImageModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  tags: PropTypes.string.isRequired,
-  largeImageURL: PropTypes.string.isRequired,
-};
+  onKeyDown = event => {
+    if (event.key === 'Escape') {
+      this.props.closeModal();
+    }
+  };
+
+  handleBackdropClick = event => {
+    if (event.target === event.currentTarget) {
+      this.props.closeModal();
+    }
+  };
+
+  render() {
+    const { image, imageTag } = this.props;
+    return (
+      <>
+        <Backdrop onClick={this.handleBackdropClick}>
+          <ModalWindow src={image} alt={imageTag} />
+        </Backdrop>
+      </>
+    );
+  }
+}

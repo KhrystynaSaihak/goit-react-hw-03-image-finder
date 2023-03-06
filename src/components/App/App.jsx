@@ -45,8 +45,6 @@ export class App extends Component {
       }
       this.setState(prevState => ({
         images: [...prevState.images, ...images],
-        query,
-        page,
         totalHits,
       }));
     } catch (erorr) {
@@ -72,7 +70,7 @@ export class App extends Component {
         totalHits: 0,
       });
     }
-    e.target.seachField.value = null;
+    e.target.seachField.value = '';
   };
 
   handleMoreImage = async () => {
